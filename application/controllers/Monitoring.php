@@ -90,7 +90,7 @@ class Monitoring extends CI_Controller {
                 	'kerusakan' => $this->input->post('kerusakan'),
                 	'akibat' => $this->input->post('akibat'),
                 	'faktor' => $this->input->post('faktor'),
-                	'monitoring' => $this->input->post('monitoring'),
+                	'monitoring' => '', // Field monitoring dikosongkan
                 	'pemeliharaan' => $this->input->post('pemeliharaan'),
                 	'jml_rusak' => $this->input->post('jml_rusak'),
                 	'foto' => $gbr['file_name'],
@@ -215,7 +215,7 @@ class Monitoring extends CI_Controller {
                 	'kerusakan' => $this->input->post('kerusakan'),
                 	'akibat' => $this->input->post('akibat'),
                 	'faktor' => $this->input->post('faktor'),
-                	'monitoring' => $this->input->post('monitoring'),
+                	'monitoring' => '', // Field monitoring dikosongkan
                 	'pemeliharaan' => $this->input->post('pemeliharaan'),
                 	'jml_rusak' => $this->input->post('jml_rusak'),
                 	'foto' => $gbr['file_name'],
@@ -240,7 +240,7 @@ class Monitoring extends CI_Controller {
 				'kerusakan' => $this->input->post('kerusakan'),
 				'akibat' => $this->input->post('akibat'),
 				'faktor' => $this->input->post('faktor'),
-				'monitoring' => $this->input->post('monitoring'),
+				'monitoring' => '', // Field monitoring dikosongkan
 				'pemeliharaan' => $this->input->post('pemeliharaan'),
 				'jml_rusak' => $this->input->post('jml_rusak'),
 				'updated_at' => date('Y-m-d H:i:s')

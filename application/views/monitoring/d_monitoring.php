@@ -145,7 +145,6 @@
                     <th>FOTO ASET</th>
                     <th>KERUSAKAN</th>
                     <th>FAKTOR YANG MEMPENGARUHI</th>
-                    <th>MONITORING</th>
                     <th>PEMELIHARAAN YANG HARUS DILAKUKAN</th>
                   </tr>
                 </thead>
@@ -156,7 +155,6 @@
                     </td>
                     <td><?= $mt['kerusakan'] ?></td>
                     <td rowspan="4"><?= $mt['faktor'] ?></td>
-                    <td rowspan="4"><?= $mt['monitoring'] ?></td>
                     <td rowspan="4"><?= $mt['pemeliharaan'] ?></td>
                   </tr>
                   <tr>
