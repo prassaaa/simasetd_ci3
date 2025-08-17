@@ -16,7 +16,7 @@ class ModelLaporan extends CI_Model {
 		return $query->result_array();
 	}
 
-	public function getAsetWujudFilter($id_lokasi, $tahun_perolehan, $id_kategori, $kondisi)
+	public function getAsetWujudFilter($id_lokasi, $tahun_perolehan, $id_kategori, $kondisi, $jenis_bantuan = '')
 	{
 		$this->db->select('*');
 		$this->db->from('asets a');
@@ -39,6 +39,11 @@ class ModelLaporan extends CI_Model {
 		// Filter kondisi
 		if(!empty($kondisi)) {
 			$this->db->where('kondisi', $kondisi);
+		}
+
+		// Filter cara perolehan (jenis bantuan)
+		if(!empty($jenis_bantuan)) {
+			$this->db->where('jenis_bantuan', $jenis_bantuan);
 		}
 
 		$query = $this->db->get();
@@ -148,7 +153,7 @@ class ModelLaporan extends CI_Model {
 		return $query->result_array();
 	}
 
-	public function getAsetWujudFilterExcel($id_lokasi, $tahun_perolehan, $id_kategori, $kondisi)
+	public function getAsetWujudFilterExcel($id_lokasi, $tahun_perolehan, $id_kategori, $kondisi, $jenis_bantuan = '')
 	{
 		$this->db->select('a.*, b.nama_barang, b.satuan, c.nama_kategori');
 		$this->db->from('asets a');
@@ -171,6 +176,11 @@ class ModelLaporan extends CI_Model {
 		// Filter kondisi
 		if(!empty($kondisi)) {
 			$this->db->where('kondisi', $kondisi);
+		}
+
+		// Filter cara perolehan (jenis bantuan)
+		if(!empty($jenis_bantuan)) {
+			$this->db->where('jenis_bantuan', $jenis_bantuan);
 		}
 
 		$query = $this->db->get();

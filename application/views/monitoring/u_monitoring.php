@@ -78,16 +78,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="form-group row">
-                    <label for="jenis_bantuan" class="col-sm-4 col-form-label">Jenis Aset (Cara Perolehan)</label>
-                    <div class="col-sm-6">
-                      <select name="jenis_bantuan" class="form-control" required>
-                        <option value="">- Pilih Jenis --</option>
-                        <option value="Pembelian" <?= ($mt['jenis_bantuan'] == 'Pembelian') ? 'selected' : '' ?>>Pembelian</option>
-                        <option value="Hibah" <?= ($mt['jenis_bantuan'] == 'Hibah') ? 'selected' : '' ?>>Hibah</option>
-                      </select>
-                    </div>
-                  </div>
+
 
                   <div class="form-group row">
                     <label for="pemeliharaan" class="col-sm-4 col-form-label">Pemeliharaan yang harus dilakukan</label>

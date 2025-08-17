@@ -99,10 +99,9 @@ class Monitoring extends CI_Controller {
                 $result = $this->mm->storeMonitoring($data);
 
                 if($result) {
-	                // Update kondisi dan jenis bantuan aset
+	                // Update kondisi aset
 	                $update_data = array(
-	                	'kondisi' => $this->input->post('kondisi'),
-	                	'jenis_bantuan' => $this->input->post('jenis_bantuan')
+	                	'kondisi' => $this->input->post('kondisi')
 	                );
 	                $this->mm->updateKondisiAset($this->input->post('id_aset'), $update_data);
 
@@ -224,10 +223,9 @@ class Monitoring extends CI_Controller {
                 unset($data['id_monitoring']);
                 $this->mm->updateMonitoring($id_monitoring,$data);
 
-                // Update kondisi dan jenis bantuan aset
+                // Update kondisi aset
                 $update_data = array(
-                	'kondisi' => $this->input->post('kondisi'),
-                	'jenis_bantuan' => $this->input->post('jenis_bantuan')
+                	'kondisi' => $this->input->post('kondisi')
                 );
                 $this->mm->updateKondisiAset($this->input->post('id_aset'), $update_data);
 
@@ -248,10 +246,9 @@ class Monitoring extends CI_Controller {
 			unset($data['id_monitoring']);
 			$res = $this->mm->updateMonitoring($id_monitoring,$data);
 
-			// Update kondisi dan jenis bantuan aset
+			// Update kondisi aset
 			$update_data = array(
-				'kondisi' => $this->input->post('kondisi'),
-				'jenis_bantuan' => $this->input->post('jenis_bantuan')
+				'kondisi' => $this->input->post('kondisi')
 			);
 			$this->mm->updateKondisiAset($this->input->post('id_aset'), $update_data);
 

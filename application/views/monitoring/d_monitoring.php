@@ -66,6 +66,11 @@
                       <td><?= $d['tahun_perolehan'] ?></td>
                     </tr>
                     <tr>
+                      <td width="100px">Cara Perolehan</td>
+                      <td width="50px">:</td>
+                      <td><?= $d['jenis_bantuan'] ?></td>
+                    </tr>
+                    <tr>
                       <td width="100px">Lokasi Aset</td>
                       <td width="50px">:</td>
                       <td><?= $d['nama_lokasi'] ?></td>

@@ -42,6 +42,7 @@ class Laporan extends CI_Controller {
 		$tahun_perolehan = $this->input->post('tahun_perolehan');
 		$id_kategori = $this->input->post('id_kategori');
 		$kondisi = $this->input->post('kondisi');
+		$jenis_bantuan = $this->input->post('jenis_bantuan');
 
 		$data = array(
 			'title' => 'Laporan Data Aset',
@@ -52,12 +53,13 @@ class Laporan extends CI_Controller {
 			'kategori' => $this->ml->getKategori(),
 			'kondisi' => $this->ml->getKondisi(),
 			'lok' => $this->ml->getLokasiId($id_lokasi),
-			'aset' => $this->ml->getAsetWujudFilter($id_lokasi, $tahun_perolehan, $id_kategori, $kondisi),
+			'aset' => $this->ml->getAsetWujudFilter($id_lokasi, $tahun_perolehan, $id_kategori, $kondisi, $jenis_bantuan),
 			'filter' => array(
 				'id_lokasi' => $id_lokasi,
 				'tahun_perolehan' => $tahun_perolehan,
 				'id_kategori' => $id_kategori,
-				'kondisi' => $kondisi
+				'kondisi' => $kondisi,
+				'jenis_bantuan' => $jenis_bantuan
 			)
 		);
 
@@ -93,13 +95,15 @@ class Laporan extends CI_Controller {
 		$tahun_perolehan = $this->input->post('tahun_perolehan');
 		$id_kategori = $this->input->post('id_kategori');
 		$kondisi = $this->input->post('kondisi');
+		$jenis_bantuan = $this->input->post('jenis_bantuan');
 
-		$data['aset'] = $this->ml->getAsetWujudFilter($id_lokasi, $tahun_perolehan, $id_kategori, $kondisi);
+		$data['aset'] = $this->ml->getAsetWujudFilter($id_lokasi, $tahun_perolehan, $id_kategori, $kondisi, $jenis_bantuan);
 		$data['lokasi'] = $this->ml->getLokasiId($id_lokasi);
 		$data['filter'] = array(
 			'tahun_perolehan' => $tahun_perolehan,
 			'id_kategori' => $id_kategori,
-			'kondisi' => $kondisi
+			'kondisi' => $kondisi,
+			'jenis_bantuan' => $jenis_bantuan
 		);
 
 		if (count($data['aset'])>0) {
@@ -159,8 +163,9 @@ class Laporan extends CI_Controller {
 		$tahun_perolehan = $this->input->post('tahun_perolehan');
 		$id_kategori = $this->input->post('id_kategori');
 		$kondisi = $this->input->post('kondisi');
+		$jenis_bantuan = $this->input->post('jenis_bantuan');
 
-		$aset = $this->ml->getAsetWujudFilterExcel($id_lokasi, $tahun_perolehan, $id_kategori, $kondisi);
+		$aset = $this->ml->getAsetWujudFilterExcel($id_lokasi, $tahun_perolehan, $id_kategori, $kondisi, $jenis_bantuan);
 
 		$spreadsheet = new Spreadsheet;
 

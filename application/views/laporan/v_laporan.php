@@ -41,7 +41,7 @@
           <div class="card-body">
               <form action="<?=base_url('laporan/search_aset')?>" method="post">
                 <div class="row mb-3">
-                    <div class="col-3">
+                    <div class="col-md-2">
                         <label>Lokasi Aset</label>
                         <select name="id_lokasi" class="form-control" required>
                           <option value="">- Pilih Lokasi --</option>
@@ -50,7 +50,7 @@
                           <?php endforeach ?>
                         </select>
                     </div>
-                    <div class="col-3">
+                    <div class="col-md-2">
                         <label>Tahun Perolehan</label>
                         <select name="tahun_perolehan" class="form-control" required>
                           <option value="">- Pilih Tahun --</option>
@@ -63,7 +63,7 @@
                           ?>
                         </select>
                     </div>
-                    <div class="col-3">
+                    <div class="col-md-2">
                         <label>Kategori</label>
                         <select name="id_kategori" class="form-control">
                           <option value="">- Semua Kategori --</option>
@@ -72,7 +72,7 @@
                           <?php endforeach ?>
                         </select>
                     </div>
-                    <div class="col-3">
+                    <div class="col-md-2">
                         <label>Kondisi</label>
                         <select name="kondisi" class="form-control">
                           <option value="">- Semua Kondisi --</option>
@@ -81,15 +81,21 @@
                           <?php endforeach ?>
                         </select>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                      <button type="submit" class="btn btn-block btn-outline-primary">Cari Data</button>
+                    <div class="col-md-2">
+                        <label>Cara Perolehan</label>
+                        <select name="jenis_bantuan" class="form-control">
+                          <option value="">- Semua Cara --</option>
+                          <option value="Pembelian" <?= (isset($filter['jenis_bantuan']) && $filter['jenis_bantuan'] == 'Pembelian') ? 'selected' : '' ?>>Pembelian</option>
+                          <option value="Hibah" <?= (isset($filter['jenis_bantuan']) && $filter['jenis_bantuan'] == 'Hibah') ? 'selected' : '' ?>>Hibah</option>
+                        </select>
                     </div>
-                    <div class="col">
-                      <button type="reset" class="btn btn-block btn-outline-danger">Reset</button>
+                    <div class="col-md-2">
+                        <div style="margin-top: 32px;">
+                          <button type="submit" class="btn btn-block btn-outline-primary">Cari Data</button>
+                        </div>
                     </div>
                 </div>
+
               </form>
               <button type="button" class="btn btn-danger mt-4" disabled>
                 <i class="fa fa-print" aria-hidden="true"></i> Print
