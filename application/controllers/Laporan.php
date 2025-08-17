@@ -27,7 +27,9 @@ class Laporan extends CI_Controller {
 			'active_menu_lp' => 'menu-open',
 			'active_menu_lpr' => 'active',
 			'active_menu_ast' => 'active',
-			'lokasi' => $this->ml->getLokasi()  
+			'lokasi' => $this->ml->getLokasi(),
+			'kategori' => $this->ml->getKategori(),
+			'kondisi' => $this->ml->getKondisi()
 		);
 		$this->load->view('layouts/header',$data);
 		$this->load->view('laporan/v_laporan',$data);
@@ -38,6 +40,8 @@ class Laporan extends CI_Controller {
 	{
 		$id_lokasi = $this->input->post('id_lokasi');
 		$tahun_perolehan = $this->input->post('tahun_perolehan');
+		$id_kategori = $this->input->post('id_kategori');
+		$kondisi = $this->input->post('kondisi');
 
 		$data = array(
 			'title' => 'Laporan Data Aset',
@@ -45,8 +49,16 @@ class Laporan extends CI_Controller {
 			'active_menu_lpr' => 'active',
 			'active_menu_ast' => 'active',
 			'lokasi' => $this->ml->getLokasi(),
+			'kategori' => $this->ml->getKategori(),
+			'kondisi' => $this->ml->getKondisi(),
 			'lok' => $this->ml->getLokasiId($id_lokasi),
-			'aset' => $this->ml->getAsetWujud($id_lokasi,$tahun_perolehan) 
+			'aset' => $this->ml->getAsetWujudFilter($id_lokasi, $tahun_perolehan, $id_kategori, $kondisi),
+			'filter' => array(
+				'id_lokasi' => $id_lokasi,
+				'tahun_perolehan' => $tahun_perolehan,
+				'id_kategori' => $id_kategori,
+				'kondisi' => $kondisi
+			)
 		);
 
 		if (count($data['aset'])>0) {
@@ -66,6 +78,29 @@ class Laporan extends CI_Controller {
 
 		$data['aset'] = $this->ml->getAsetWujud($id_lokasi,$tahun_perolehan);
 		$data['lokasi'] = $this->ml->getLokasiId($id_lokasi);
+
+		if (count($data['aset'])>0) {
+			$this->load->view('laporan/p_aset',$data);
+		} else {
+			$this->session->set_flashdata('gagal', 'Ditemukan');
+		    redirect('laporan/aset');
+		}
+	}
+
+	public function printasetfilter()
+	{
+		$id_lokasi = $this->input->post('id_lokasi');
+		$tahun_perolehan = $this->input->post('tahun_perolehan');
+		$id_kategori = $this->input->post('id_kategori');
+		$kondisi = $this->input->post('kondisi');
+
+		$data['aset'] = $this->ml->getAsetWujudFilter($id_lokasi, $tahun_perolehan, $id_kategori, $kondisi);
+		$data['lokasi'] = $this->ml->getLokasiId($id_lokasi);
+		$data['filter'] = array(
+			'tahun_perolehan' => $tahun_perolehan,
+			'id_kategori' => $id_kategori,
+			'kondisi' => $kondisi
+		);
 
 		if (count($data['aset'])>0) {
 			$this->load->view('laporan/p_aset',$data);
@@ -113,6 +148,55 @@ class Laporan extends CI_Controller {
 
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="Data Aset.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');
+	}
+
+	public function exportasetfilter()
+	{
+		$id_lokasi = $this->input->post('id_lokasi');
+		$tahun_perolehan = $this->input->post('tahun_perolehan');
+		$id_kategori = $this->input->post('id_kategori');
+		$kondisi = $this->input->post('kondisi');
+
+		$aset = $this->ml->getAsetWujudFilterExcel($id_lokasi, $tahun_perolehan, $id_kategori, $kondisi);
+
+		$spreadsheet = new Spreadsheet;
+
+		$spreadsheet->setActiveSheetIndex(0)
+					->setCellValue('A1', 'NO')
+					->setCellValue('B1', 'NAMA')
+					->setCellValue('C1', 'VOLUME')
+					->setCellValue('D1', 'SATUAN')
+					->setCellValue('E1', 'HARGA (Rp.)')
+					->setCellValue('F1', 'JUMLAH (Rp.)')
+					->setCellValue('G1', 'KONDISI')
+					->setCellValue('H1', 'KATEGORI');
+
+		$kolom = 2;
+		$nomor = 1;
+		foreach($aset as $item) {
+
+			$spreadsheet->setActiveSheetIndex(0)
+			->setCellValue('A' . $kolom, $nomor)
+			->setCellValue('B' . $kolom, $item->nama_barang)
+			->setCellValue('C' . $kolom, $item->volume)
+			->setCellValue('D' . $kolom, $item->satuan)
+			->setCellValue('E' . $kolom, $item->harga)
+			->setCellValue('F' . $kolom, $item->total_harga)
+			->setCellValue('G' . $kolom, $item->kondisi)
+			->setCellValue('H' . $kolom, $item->nama_kategori);
+
+			$kolom++;
+			$nomor++;
+
+		}
+
+		$writer = new Xlsx($spreadsheet);
+
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="Data Aset Filtered.xlsx"');
 		header('Cache-Control: max-age=0');
 
 		$writer->save('php://output');

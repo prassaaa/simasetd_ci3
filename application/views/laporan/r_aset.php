@@ -39,40 +39,80 @@
           </div>
         </div>
           <div class="card-body">
-              <form action="<?=base_url('laporan/print_aset')?>" method="post">
-                <div class="row">
-                    <div class="col-4">
+              <form action="<?=base_url('laporan/search_aset')?>" method="post">
+                <div class="row mb-3">
+                    <div class="col-3">
+                        <label>Lokasi Aset</label>
                         <select name="id_lokasi" class="form-control" required>
-                          <option value="">- Lokasi Aset --</option>
+                          <option value="">- Pilih Lokasi --</option>
                           <?php foreach ($lokasi as $row): ?>
-                            <option value="<?=$row['id_lokasi'];?>"><?=$row['nama_lokasi'];?></option>
-                          <?php endforeach ?>                              
+                            <option value="<?=$row['id_lokasi'];?>" <?= (isset($filter['id_lokasi']) && $filter['id_lokasi'] == $row['id_lokasi']) ? 'selected' : '' ?>><?=$row['nama_lokasi'];?></option>
+                          <?php endforeach ?>
                         </select>
                     </div>
-                    <div class="col-4">
-                      <select name="tahun_perolehan" class="form-control" required>
-                        <option value="">- Tahun Perolehan --</option>
-                        <?php 
-                        for($i = 2010 ; $i <= date('Y'); $i++){
-                          echo "<option value='$i'>$i</option>";
-                        }
-                        ?>                          
-                      </select>
+                    <div class="col-3">
+                        <label>Tahun Perolehan</label>
+                        <select name="tahun_perolehan" class="form-control" required>
+                          <option value="">- Pilih Tahun --</option>
+                          <option value="semua" <?= (isset($filter['tahun_perolehan']) && $filter['tahun_perolehan'] == 'semua') ? 'selected' : '' ?>>Semua Tahun</option>
+                          <?php
+                          for($i = 2010 ; $i <= date('Y'); $i++){
+                            $selected = (isset($filter['tahun_perolehan']) && $filter['tahun_perolehan'] == $i) ? 'selected' : '';
+                            echo "<option value='$i' $selected>$i</option>";
+                          }
+                          ?>
+                        </select>
                     </div>
+                    <div class="col-3">
+                        <label>Kategori</label>
+                        <select name="id_kategori" class="form-control">
+                          <option value="">- Semua Kategori --</option>
+                          <?php foreach ($kategori as $row): ?>
+                            <option value="<?=$row['id_kategori'];?>" <?= (isset($filter['id_kategori']) && $filter['id_kategori'] == $row['id_kategori']) ? 'selected' : '' ?>><?=$row['kode_kategori'];?> - <?=$row['nama_kategori'];?></option>
+                          <?php endforeach ?>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label>Kondisi</label>
+                        <select name="kondisi" class="form-control">
+                          <option value="">- Semua Kondisi --</option>
+                          <?php foreach ($kondisi as $row): ?>
+                            <option value="<?=$row['kondisi'];?>" <?= (isset($filter['kondisi']) && $filter['kondisi'] == $row['kondisi']) ? 'selected' : '' ?>><?=$row['kondisi'];?></option>
+                          <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col">
-                      <button type="submit" class="btn btn-block btn-outline-primary">Print</button>
+                      <button type="submit" class="btn btn-block btn-outline-primary">Cari Data</button>
                     </div>
                     <div class="col">
                       <button type="reset" class="btn btn-block btn-outline-danger">Reset</button>
-                    </div>              
+                    </div>
                 </div>
               </form>
-              <a href="<?=base_url('laporan/print_aset/').$this->input->post('id_lokasi').'/'.$this->input->post('tahun_perolehan')?>" target="_blank" class="btn btn-danger mt-4">
-                <i class="fa fa-print" aria-hidden="true"></i> Print
-              </a>
-              <a href="<?=base_url('laporan/export_aset/').$this->input->post('id_lokasi').'/'.$this->input->post('tahun_perolehan')?>" class="btn btn-success mt-4">
-                <i class="fa fa-file" aria-hidden="true"></i> Export Excel
-              </a>
+              <?php
+              $print_url = base_url('laporan/print_aset_filter');
+              $export_url = base_url('laporan/export_aset_filter');
+              ?>
+              <form action="<?=$print_url?>" method="post" style="display:inline;" target="_blank">
+                <input type="hidden" name="id_lokasi" value="<?=$filter['id_lokasi']?>">
+                <input type="hidden" name="tahun_perolehan" value="<?=$filter['tahun_perolehan']?>">
+                <input type="hidden" name="id_kategori" value="<?=$filter['id_kategori']?>">
+                <input type="hidden" name="kondisi" value="<?=$filter['kondisi']?>">
+                <button type="submit" class="btn btn-danger mt-4">
+                  <i class="fa fa-print" aria-hidden="true"></i> Print
+                </button>
+              </form>
+              <form action="<?=$export_url?>" method="post" style="display:inline;">
+                <input type="hidden" name="id_lokasi" value="<?=$filter['id_lokasi']?>">
+                <input type="hidden" name="tahun_perolehan" value="<?=$filter['tahun_perolehan']?>">
+                <input type="hidden" name="id_kategori" value="<?=$filter['id_kategori']?>">
+                <input type="hidden" name="kondisi" value="<?=$filter['kondisi']?>">
+                <button type="submit" class="btn btn-success mt-4">
+                  <i class="fa fa-file" aria-hidden="true"></i> Export Excel
+                </button>
+              </form>
               <div class="mt-4">
                 <div class="col">
                   <b>Lokasi Aset :</b> <?=$lok['nama_lokasi']?>

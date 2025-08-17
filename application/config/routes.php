@@ -107,6 +107,8 @@ $route['penghapusan/simpan'] = 'Penghapusan/simpanPenghapusan';
 //Laporan Data Aset
 $route['laporan/aset'] = 'Laporan/aset';
 $route['laporan/search_aset'] = 'Laporan/searchAset';
+$route['laporan/print_aset_filter'] = 'Laporan/printasetfilter';
+$route['laporan/export_aset_filter'] = 'Laporan/exportasetfilter';
 $route['laporan/print_aset/(:any)/(:any)'] = 'Laporan/printAset/(:any)/(:any)';
 $route['laporan/export_aset/(:any)/(:any)'] = 'Laporan/export_aset/(:any)/(:any)';
 //Laporan Penghapusan
