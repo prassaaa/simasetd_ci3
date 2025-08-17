@@ -45,24 +45,43 @@ class Monitoring extends CI_Controller {
 
 	public function simpanMonitoring()
 	{
-		$config['upload_path'] = 'src/img/aset/'; 
-        $config['allowed_types'] = 'gif|jpg|png';  
-        $config['encrypt_name'] = TRUE; 
+		// Pastikan folder upload ada
+		if (!is_dir('src/img/aset/')) {
+			mkdir('src/img/aset/', 0755, true);
+		}
+
+		$config['upload_path'] = './src/img/aset/';
+        $config['allowed_types'] = '*'; // Allow all types temporarily
+        $config['encrypt_name'] = TRUE;
+        $config['max_size'] = 5120; // 5MB
+        $config['overwrite'] = FALSE;
+        $config['remove_spaces'] = TRUE;
 
         $this->upload->initialize($config);
         if(!empty($_FILES['foto']['name'])){
- 
+
+        	// Manual validation untuk file extension
+        	$file_name = $_FILES['foto']['name'];
+        	$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+        	$allowed_ext = array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp');
+
+        	if(!in_array($file_ext, $allowed_ext)) {
+        		$this->session->set_flashdata('gagal', 'Tipe file tidak diizinkan. Gunakan: JPG, JPEG, PNG, GIF, BMP, WEBP');
+				redirect('monitoring/tambah');
+				return;
+        	}
+
             if ($this->upload->do_upload('foto')){
                 $gbr = $this->upload->data();
                 //Compress Image
                 $config['image_library']='gd2';
-                $config['source_image']='src/img/aset/'.$gbr['file_name'];
+                $config['source_image']='./src/img/aset/'.$gbr['file_name'];
                 $config['create_thumb']= FALSE;
                 $config['maintain_ratio']= FALSE;
                 $config['quality']= '60%';
                 $config['width']= 500;
                 $config['height']= 500;
-                $config['new_image']= 'src/img/aset/'.$gbr['file_name'];
+                $config['new_image']= './src/img/aset/'.$gbr['file_name'];
                 $this->load->library('image_lib', $config);
                 $this->image_lib->resize();
 
@@ -70,21 +89,46 @@ class Monitoring extends CI_Controller {
                 	'id_aset' => $this->input->post('id_aset'),
                 	'kerusakan' => $this->input->post('kerusakan'),
                 	'akibat' => $this->input->post('akibat'),
-                	'faktor' => $this->input->post('faktor'), 
+                	'faktor' => $this->input->post('faktor'),
                 	'monitoring' => $this->input->post('monitoring'),
                 	'pemeliharaan' => $this->input->post('pemeliharaan'),
                 	'jml_rusak' => $this->input->post('jml_rusak'),
                 	'foto' => $gbr['file_name'],
                 	'updated_at' => date('Y-m-d H:i:s')
                 );
-                $this->mm->storeMonitoring($data);
+                $result = $this->mm->storeMonitoring($data);
 
-               	$this->session->set_flashdata('sukses', 'Disimpan');
-				redirect('monitoring');
+                if($result) {
+	                // Update kondisi dan jenis bantuan aset
+	                $update_data = array(
+	                	'kondisi' => $this->input->post('kondisi'),
+	                	'jenis_bantuan' => $this->input->post('jenis_bantuan')
+	                );
+	                $this->mm->updateKondisiAset($this->input->post('id_aset'), $update_data);
+
+	               	$this->session->set_flashdata('sukses', 'Disimpan');
+					redirect('monitoring');
+                } else {
+                	$this->session->set_flashdata('gagal', 'Gagal menyimpan data');
+					redirect('monitoring/tambah');
+                }
+            } else {
+            	$error = $this->upload->display_errors();
+            	echo "Upload Error: " . $error . "<br>";
+            	echo "File Info: <br>";
+            	echo "Name: " . $_FILES['foto']['name'] . "<br>";
+            	echo "Type: " . $_FILES['foto']['type'] . "<br>";
+            	echo "Size: " . $_FILES['foto']['size'] . "<br>";
+            	echo "Error: " . $_FILES['foto']['error'] . "<br>";
+            	echo "Temp: " . $_FILES['foto']['tmp_name'] . "<br>";
+            	echo "<a href='" . base_url('monitoring/tambah') . "'>Kembali</a>";
+            	return;
+            	// $this->session->set_flashdata('gagal', 'Gagal upload foto: ' . $error);
+				// redirect('monitoring/tambah');
             }
-                      
+
         }else{
-            $this->session->set_flashdata('gagal', 'Disimpan');
+            $this->session->set_flashdata('gagal', 'Foto harus diupload');
 			redirect('monitoring/tambah');
         }
 	}
@@ -126,13 +170,26 @@ class Monitoring extends CI_Controller {
 		$id_monitoring = $this->input->post('id_monitoring');
 		if ($_FILES['foto']['name']){
 
-			$config['upload_path'] = 'src/img/aset/'; 
-			$config['allowed_types'] = 'gif|jpg|png';  
+			$config['upload_path'] = './src/img/aset/';
+			$config['allowed_types'] = '*'; // Allow all types temporarily
 			$config['encrypt_name'] = TRUE;
+			$config['max_size'] = 5120; // 5MB
+
+			// Manual validation untuk file extension
+			$file_name = $_FILES['foto']['name'];
+			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+			$allowed_ext = array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp');
+
+			if(!in_array($file_ext, $allowed_ext)) {
+				$this->session->set_flashdata('gagal', 'Tipe file tidak diizinkan. Gunakan: JPG, JPEG, PNG, GIF, BMP, WEBP');
+				redirect('monitoring/edit/'.$id_monitoring);
+				return;
+			}
 
 			$this->upload->initialize($config);
 			if ( ! $this->upload->do_upload('foto')){
-				$this->session->set_flashdata('gagal', 'Diupload');
+				$error = $this->upload->display_errors();
+				$this->session->set_flashdata('gagal', 'Gagal upload: ' . $error);
 				redirect('monitoring/edit/'.$id_monitoring);
 			}else{
 				$ambildata = $this->mm->getDetailAset($id_monitoring);
@@ -157,7 +214,7 @@ class Monitoring extends CI_Controller {
                 	'id_aset' => $this->input->post('id_aset'),
                 	'kerusakan' => $this->input->post('kerusakan'),
                 	'akibat' => $this->input->post('akibat'),
-                	'faktor' => $this->input->post('faktor'), 
+                	'faktor' => $this->input->post('faktor'),
                 	'monitoring' => $this->input->post('monitoring'),
                 	'pemeliharaan' => $this->input->post('pemeliharaan'),
                 	'jml_rusak' => $this->input->post('jml_rusak'),
@@ -167,15 +224,22 @@ class Monitoring extends CI_Controller {
                 unset($data['id_monitoring']);
                 $this->mm->updateMonitoring($id_monitoring,$data);
 
+                // Update kondisi dan jenis bantuan aset
+                $update_data = array(
+                	'kondisi' => $this->input->post('kondisi'),
+                	'jenis_bantuan' => $this->input->post('jenis_bantuan')
+                );
+                $this->mm->updateKondisiAset($this->input->post('id_aset'), $update_data);
+
                	$this->session->set_flashdata('sukses', 'Diubah');
 				redirect('monitoring');
 			}
-		}else{ 		
+		}else{
 			$data = array(
 				'id_aset' => $this->input->post('id_aset'),
 				'kerusakan' => $this->input->post('kerusakan'),
 				'akibat' => $this->input->post('akibat'),
-				'faktor' => $this->input->post('faktor'), 
+				'faktor' => $this->input->post('faktor'),
 				'monitoring' => $this->input->post('monitoring'),
 				'pemeliharaan' => $this->input->post('pemeliharaan'),
 				'jml_rusak' => $this->input->post('jml_rusak'),
@@ -183,6 +247,14 @@ class Monitoring extends CI_Controller {
 			);
 			unset($data['id_monitoring']);
 			$res = $this->mm->updateMonitoring($id_monitoring,$data);
+
+			// Update kondisi dan jenis bantuan aset
+			$update_data = array(
+				'kondisi' => $this->input->post('kondisi'),
+				'jenis_bantuan' => $this->input->post('jenis_bantuan')
+			);
+			$this->mm->updateKondisiAset($this->input->post('id_aset'), $update_data);
+
 			if($res>=1){
 				$this->session->set_flashdata('sukses', 'Diubah');
 				redirect('monitoring');

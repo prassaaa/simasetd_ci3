@@ -66,6 +66,27 @@
                     </div>
                   </div>
                   <div class="form-group row">
+                    <label for="kondisi" class="col-sm-4 col-form-label">Kondisi Aset</label>
+                    <div class="col-sm-6">
+                      <select name="kondisi" class="form-control" required>
+                        <option value="">- Pilih Kondisi --</option>
+                        <option value="Baik">Baik</option>
+                        <option value="Renovasi">Renovasi</option>
+                        <option value="Rusak">Rusak</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="jenis_bantuan" class="col-sm-4 col-form-label">Jenis Aset (Cara Perolehan)</label>
+                    <div class="col-sm-6">
+                      <select name="jenis_bantuan" class="form-control" required>
+                        <option value="">- Pilih Jenis --</option>
+                        <option value="Pembelian">Pembelian</option>
+                        <option value="Hibah">Hibah</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
                     <label for="monitoring" class="col-sm-4 col-form-label">Monitoring</label>
                     <div class="col-sm-6">
                       <textarea name="monitoring" class="textarea form-control" required></textarea>

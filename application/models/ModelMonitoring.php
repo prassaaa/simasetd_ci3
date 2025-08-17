@@ -51,6 +51,12 @@ class ModelMonitoring extends CI_Model {
         return $res;
     }
 
+    public function updateKondisiAset($id_aset,$data){
+        $this->db->where(array('id_aset' => $id_aset));
+        $res = $this->db->update('asets',$data);
+        return $res;
+    }
+
 }
 
 /* End of file ModelMonitoring.php */
