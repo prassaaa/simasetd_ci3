@@ -22,12 +22,13 @@
 				<img src="<?= base_url() ?>src/img/logo/logo.png" class="kiri" alt="">
 			</div>
 			<div class="col-md-10 text-center">
-				<h2>PEMERINTAH PROVINSI SULAWESI TENGAH</h2>
-				<h3>DINAS KEPENDUDUKAN DAN PENCATATAN SIPIL</h3>
-				<p>Jl. Pramuka No.21 TELP. (0451) 483400-483443 <br>
-					<strong>e-mail:disdukcapilsultengprov@gmail.com</strong>
+				<h1 style="color: #2c3e50; font-weight: bold; margin-bottom: 10px;">SIMASET DISHUB</h1>
+				<h3>SISTEM MANAJEMEN ASET</h3>
+				<h4>DINAS PERHUBUNGAN</h4>
+				<p>PEMERINTAH PROVINSI SULAWESI TENGAH<br>
+					Jl. Pramuka No.21 TELP. (0451) 483400-483443
 				</p>
-				<h2>PALU</h2>
+				<h5>PALU</h5>
 			</div>
 		</div>
 		<hr style="border: 1px solid black;">

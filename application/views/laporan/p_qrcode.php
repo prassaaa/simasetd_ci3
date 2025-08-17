@@ -23,6 +23,27 @@
     <meta http-equiv="REFRESH" content="5; url=<?=base_url('laporan/aset')?>">
     
     <div class="container">
+      <!-- Header SIMASET DISHUB -->
+      <div class="row pt-4">
+        <div class="col-md-2">
+          <img src="<?= base_url() ?>src/img/logo/logo.png" class="kiri" alt="">
+        </div>
+        <div class="col-md-10 text-center">
+          <h1 style="color: #2c3e50; font-weight: bold; margin-bottom: 10px;">SIMASET DISHUB</h1>
+          <h3>SISTEM MANAJEMEN ASET</h3>
+          <h4>DINAS PERHUBUNGAN</h4>
+          <p>PEMERINTAH PROVINSI SULAWESI TENGAH<br>
+            Jl. Pramuka No.21 TELP. (0451) 483400-483443
+          </p>
+          <h5>PALU</h5>
+        </div>
+      </div>
+      <hr style="border: 1px solid black;">
+      <div class="row">
+        <div class="col text-center">
+          <h5>QR CODE ASET</h5>
+        </div>
+      </div>
       <div class="row mt-3">
         <?php foreach ($aset as $row) {?>
         <div class="col-md-2">
